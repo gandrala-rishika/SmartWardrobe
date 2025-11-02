@@ -45,7 +45,7 @@ JWT_EXPIRATION_HOURS = 24
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY')
 
 # Frontend URL - HARDCODED FOR NETLIFY
-FRONTEND_URL = "https://smart-wardrobe-vitap.netlify.app"
+FRONTEND_URL = "https://smartwardrobe-s91s.onrender.com"
 
 # Image storage configuration
 UPLOAD_DIR = ROOT_DIR / "uploads"
