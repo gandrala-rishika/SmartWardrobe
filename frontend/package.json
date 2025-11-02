@@ -56,7 +56,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "npx craco build",
+    "build": "yarn exec craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
