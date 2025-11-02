@@ -38,7 +38,7 @@ Smart Wardrobe is a web application that transforms your clothing collection int
 - HTML5 for page structure
 - JavaScript for functionality
 - JSX for UI components
-- Netlify for Frontend deployment
+- Render for Frontend deployment
 
 ## Quick Start Guide
 
@@ -117,4 +117,4 @@ yarn start
 
 ## Acknowledgments
 
-Thanks to OpenRouter for AI models, MongoDB for the database, FastAPI for the web framework, and Netlify & Render for deployment. We thank you from the bottom of our hearts for helping us complete this project
+Thanks to OpenRouter for AI models, MongoDB for the database, FastAPI for the web framework, and Render for deployment. We thank you from the bottom of our hearts for helping us complete this project
