@@ -6,8 +6,8 @@ import { ArrowLeft, Plus, Calendar, Tag, Palette, User, Star } from "lucide-reac
 
 // Define your backend server's URL based on environment
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_PROD_BACKEND_URL
-  : process.env.REACT_APP_DEV_BACKEND_URL;
+  ? process.env.REACT_APP_PROD_BACKEND_URL || "https://smartwardrobe-qrzg.onrender.com"
+  : process.env.REACT_APP_DEV_BACKEND_URL || "http://127.0.0.1:8000";
 
 const SharedOutfitPage = () => {
   const { shareToken } = useParams();

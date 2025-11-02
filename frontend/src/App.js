@@ -20,8 +20,8 @@ import Sidebar from "./components/ui/sidebar";
 // FIXED: Updated backend URL configuration for deployment
 // This now checks if we're in production or development
 const BACKEND_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_PROD_BACKEND_URL
-  : process.env.REACT_APP_DEV_BACKEND_URL;
+  ? process.env.REACT_APP_PROD_BACKEND_URL || "https://smartwardrobe-qrzg.onrender.com"
+  : process.env.REACT_APP_DEV_BACKEND_URL || "http://127.0.0.1:8000";
 
 const API = `${BACKEND_URL}/api`;
 
