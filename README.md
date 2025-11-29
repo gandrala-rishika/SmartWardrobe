@@ -54,7 +54,7 @@ Smart Wardrobe is a web application that transforms your clothing collection int
 2. **Set up virtual environment**
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate  # On Linux: source venv/bin/activate
 ```
 
 3. **Install dependencies**
@@ -70,7 +70,7 @@ uvicorn server:app --reload
 
 5. **Open a new terminal and open the same virtual environment here as well**
   ```bash
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate  # On Windows: source venv/bin/activate
 ```
 
 6. **Start frontend**
