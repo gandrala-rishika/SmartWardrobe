@@ -70,7 +70,7 @@ uvicorn server:app --reload
 
 5. **Open a new terminal and open the same virtual environment here as well**
   ```bash
-venv\Scripts\activate  # On Windows: source venv/bin/activate
+venv\Scripts\activate  # On Linux: source venv/bin/activate
 ```
 
 6. **Start frontend**
