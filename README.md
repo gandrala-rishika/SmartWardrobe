@@ -115,6 +115,12 @@ yarn start
 4. Free tier provides good limits for testing
 
 
+## License
+
+This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+
+© 2026 Eswar Vutukuri, Gandrala Rishika, Mallampati Rupanjali, N. Kavya Sri, Ch. Kavya Sri
+
 ## Acknowledgments
 
 Thanks to OpenRouter for AI models, MongoDB for the database, FastAPI for the web framework, and Render for deployment. We thank you from the bottom of our hearts for helping us complete this project
