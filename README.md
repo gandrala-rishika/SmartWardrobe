@@ -119,7 +119,7 @@ yarn start
 
 This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
 
-© 2026 Eswar Vutukuri, Gandrala Rishika, Mallampati Rupanjali, N. Kavya Sri, Ch. Kavya Sri
+© 2026 Gandrala Rishika, Mallampati Rupanjali, N. Kavya Sri, Ch. Kavya Sri, Eswar Vutukuri
 
 ## Acknowledgments
 
