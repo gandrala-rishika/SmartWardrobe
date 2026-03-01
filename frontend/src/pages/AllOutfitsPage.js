@@ -3,12 +3,9 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Plus, Trash2, Loader2, Edit2, Eye, X, User, Settings, Share2, Copy, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-// Define your backend server's URL based on environment
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
+const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? process.env.REACT_APP_PROD_BACKEND_URL
   : process.env.REACT_APP_DEV_BACKEND_URL;
-
 const AllOutfitsPage = () => {
   const [allOutfits, setAllOutfits] = useState([]);
   const [outfitsLoading, setOutfitsLoading] = useState(true);
@@ -25,62 +22,45 @@ const AllOutfitsPage = () => {
   const fileInputRef = useRef(null);
   const editFileInputRef = useRef(null);
   const navigate = useNavigate();
-  
-  // Share functionality states
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [isGeneratingShareLink, setIsGeneratingShareLink] = useState(false);
-  
-  const [newOutfit, setNewOutfit] = useState({ 
-    name: '', 
-    category: 'casual', 
-    season: 'all', 
+  const [newOutfit, setNewOutfit] = useState({
+    name: '',
+    category: 'casual',
+    season: 'all',
     color: '',
     image_url: ''
   });
-  
-  const [editOutfit, setEditOutfit] = useState({ 
-    name: '', 
-    category: 'casual', 
-    season: 'all', 
+  const [editOutfit, setEditOutfit] = useState({
+    name: '',
+    category: 'casual',
+    season: 'all',
     color: '',
     image_url: ''
   });
-
-  // Helper function to extract error message from FastAPI error response
   const getErrorMessage = (error) => {
     if (error.response?.data?.detail) {
       const detail = error.response.data.detail;
-      
-      // Handle FastAPI validation errors (array of objects)
       if (Array.isArray(detail) && detail.length > 0) {
-        // Join all error messages into a single, readable string
         return detail.map(err => `${err.loc.join('.')}: ${err.msg}`).join('\n');
       }
-      
-      // Handle string error messages
       if (typeof detail === 'string') {
         return detail;
       }
-      
-      // Handle object error messages
       if (typeof detail === 'object' && detail.msg) {
         return detail.msg;
       }
     }
-    
-    // Fallback to other error properties
-    return error.response?.data?.message || 
-          error.message || 
-          "An error occurred";
+    return error.response?.data?.message ||
+      error.message ||
+      "An error occurred";
   };
-
   useEffect(() => {
     fetchAllOutfits();
     fetchUserProfile();
   }, []);
-
   const fetchAllOutfits = async () => {
     setOutfitsLoading(true);
     try {
@@ -92,15 +72,13 @@ const AllOutfitsPage = () => {
       setOutfitsLoading(false);
     }
   };
-
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get("/profile");
       setUserProfile(response.data);
-      // Convert relative URL to absolute URL if needed
       if (response.data.profile_pic_url) {
-        const imageUrl = response.data.profile_pic_url.startsWith('http') 
-          ? response.data.profile_pic_url 
+        const imageUrl = response.data.profile_pic_url.startsWith('http')
+          ? response.data.profile_pic_url
           : `${API_BASE_URL}${response.data.profile_pic_url}`;
         setUserProfile({
           ...response.data,
@@ -113,7 +91,6 @@ const AllOutfitsPage = () => {
       setProfileLoading(false);
     }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -124,7 +101,6 @@ const AllOutfitsPage = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const handleEditImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -135,7 +111,6 @@ const AllOutfitsPage = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const handleAddOutfit = async (e) => {
     e.preventDefault();
     if (!newOutfit.name || !newOutfit.color) {
@@ -145,7 +120,6 @@ const AllOutfitsPage = () => {
     setIsAddingOutfit(true);
     try {
       const hasImage = fileInputRef.current && fileInputRef.current.files[0];
-
       const formData = new FormData();
       formData.append('name', newOutfit.name);
       formData.append('category', newOutfit.category);
@@ -157,11 +131,9 @@ const AllOutfitsPage = () => {
       if (hasImage) {
         formData.append('image', fileInputRef.current.files[0]);
       }
-
       await axios.post("/outfits", formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-
       toast.success("Outfit added successfully!");
       resetForm();
       fetchAllOutfits();
@@ -172,15 +144,12 @@ const AllOutfitsPage = () => {
       setIsAddingOutfit(false);
     }
   };
-
   const handleUpdateOutfit = async (e) => {
     e.preventDefault();
-
     if (!selectedOutfit || !selectedOutfit.id) {
       toast.error("No outfit selected for update. Please try again.");
       return;
     }
-
     if (!editOutfit.name || !editOutfit.color) {
       toast.error("Name and color are required.");
       return;
@@ -188,7 +157,6 @@ const AllOutfitsPage = () => {
     setIsUpdatingOutfit(true);
     try {
       const hasNewImage = editFileInputRef.current && editFileInputRef.current.files[0];
-      
       const formData = new FormData();
       formData.append('name', editOutfit.name);
       formData.append('category', editOutfit.category);
@@ -200,11 +168,9 @@ const AllOutfitsPage = () => {
       if (hasNewImage) {
         formData.append('image', editFileInputRef.current.files[0]);
       }
-      
       await axios.put(`/outfits/${selectedOutfit.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-    
       toast.success("Outfit updated successfully!");
       resetEditForm();
       fetchAllOutfits();
@@ -215,7 +181,6 @@ const AllOutfitsPage = () => {
       setIsUpdatingOutfit(false);
     }
   };
-
   const handleDeleteOutfit = async (outfitId, outfitName) => {
     if (!window.confirm(`Are you sure you want to delete "${outfitName}"?`)) return;
     try {
@@ -227,7 +192,6 @@ const AllOutfitsPage = () => {
       toast.error(getErrorMessage(error));
     }
   };
-
   const openEditForm = (outfit) => {
     setSelectedOutfit(outfit);
     setEditOutfit({
@@ -237,25 +201,19 @@ const AllOutfitsPage = () => {
       color: outfit.color,
       image_url: outfit.image_url
     });
-    // This is a relative URL, so it needs the base URL prepended for display
     setEditImagePreview(outfit.image_url);
     setShowEditForm(true);
     setShowAddForm(false);
   };
-
   const viewOutfitDetails = (outfit) => {
     setSelectedOutfit(outfit);
     setShowDetails(true);
   };
-
-  // Share functionality
   const handleShareOutfit = async (outfit) => {
     setSelectedOutfit(outfit);
     setIsGeneratingShareLink(true);
-    
     try {
       const response = await axios.post(`/outfits/${outfit.id}/share`);
-      // Construct the full URL using the current origin
       const fullShareUrl = `${window.location.origin}${response.data.share_url}`;
       setShareUrl(fullShareUrl);
       setShareModalOpen(true);
@@ -265,7 +223,6 @@ const AllOutfitsPage = () => {
       setIsGeneratingShareLink(false);
     }
   };
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareUrl)
       .then(() => {
@@ -276,7 +233,6 @@ const AllOutfitsPage = () => {
         toast.error("Failed to copy link to clipboard");
       });
   };
-
   const resetForm = () => {
     setNewOutfit({ name: '', category: 'casual', season: 'all', color: '', image_url: '' });
     setImagePreview(null);
@@ -285,7 +241,6 @@ const AllOutfitsPage = () => {
       fileInputRef.current.value = '';
     }
   };
-
   const resetEditForm = () => {
     setEditOutfit({ name: '', category: 'casual', season: 'all', color: '', image_url: '' });
     setEditImagePreview(null);
@@ -295,24 +250,23 @@ const AllOutfitsPage = () => {
       editFileInputRef.current.value = '';
     }
   };
-
   return (
     <div className="page-content">
-      {/* Profile Section */}
+      { }
       <div className="profile-section">
         <div className="profile-card">
           <div className="profile-header">
             <h1 className="page-title">All Outfits</h1>
             <div className="profile-info">
-              <div 
-                className="profile-picture-container" 
+              <div
+                className="profile-picture-container"
                 onClick={() => navigate('/profile')}
                 title="Click to view profile"
               >
                 {userProfile?.profile_pic_url ? (
-                  <img 
-                    src={userProfile.profile_pic_url} 
-                    alt="Profile" 
+                  <img
+                    src={userProfile.profile_pic_url}
+                    alt="Profile"
                     className="profile-picture"
                   />
                 ) : (
@@ -324,8 +278,8 @@ const AllOutfitsPage = () => {
               <div className="profile-details">
                 <p className="profile-greeting">Hi, {userProfile?.username || "User"}</p>
               </div>
-              <button 
-                className="btn-icon profile-settings" 
+              <button
+                className="btn-icon profile-settings"
                 onClick={() => navigate('/profile')}
                 title="Profile Settings"
               >
@@ -335,7 +289,6 @@ const AllOutfitsPage = () => {
           </div>
         </div>
       </div>
-
       <div className="card">
         <div className="card-header">
           <Plus className="icon-primary" size={24} />
@@ -347,7 +300,6 @@ const AllOutfitsPage = () => {
         }}>
           {showAddForm ? "Cancel" : "Add New Outfit"}
         </button>
-
         {showAddForm && (
           <form className="add-outfit-form" onSubmit={handleAddOutfit}>
             <input
@@ -371,7 +323,6 @@ const AllOutfitsPage = () => {
               <option value="winter">Winter</option>
             </select>
             <input type="text" placeholder="Color" value={newOutfit.color} onChange={(e) => setNewOutfit({ ...newOutfit, color: e.target.value })} required />
-            
             <div className="image-upload-container">
               <label htmlFor="outfit-image" className="image-upload-label">
                 {imagePreview ? (
@@ -387,141 +338,144 @@ const AllOutfitsPage = () => {
                 id="outfit-image"
                 type="file"
                 ref={fileInputRef}
-                onChange={handleImageChange}
                 accept="image/*"
                 style={{ display: 'none' }}
               />
             </div>
-            
-            <button type="submit" className="btn btn-primary" disabled={isAddingOutfit}>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isAddingOutfit}
+              style={{ marginTop: '1rem', width: '100%' }}
+            >
               {isAddingOutfit ? "Adding..." : "Add Outfit"}
             </button>
           </form>
         )}
-
-        {showEditForm && (
-          <form className="add-outfit-form" onSubmit={handleUpdateOutfit}>
-            <input
-              type="text"
-              placeholder="Outfit Name"
-              value={editOutfit.name}
-              onChange={(e) => setEditOutfit({ ...editOutfit, name: e.target.value })}
-              required
-            />
-            <select value={editOutfit.category} onChange={(e) => setEditOutfit({ ...editOutfit, category: e.target.value })}>
-              <option value="casual">Casual</option>
-              <option value="formal">Formal</option>
-              <option value="sport">Sport</option>
-              <option value="traditional">Traditional</option>
-            </select>
-            <select value={editOutfit.season} onChange={(e) => setEditOutfit({ ...editOutfit, season: e.target.value })}>
-              <option value="all">All Season</option>
-              <option value="spring">Spring</option>
-              <option value="summer">Summer</option>
-              <option value="fall">Fall</option>
-              <option value="winter">Winter</option>
-            </select>
-            <input type="text" placeholder="Color" value={editOutfit.color} onChange={(e) => setEditOutfit({ ...editOutfit, color: e.target.value })} required />
-            
-            <div className="image-upload-container">
-              <label htmlFor="edit-outfit-image" className="image-upload-label">
-                {editImagePreview ? (
-                  // Handle both data URLs (from new file) and absolute URLs (from existing outfit)
-                  <img 
-                    src={editImagePreview.startsWith('data:') ? editImagePreview : editImagePreview} 
-                    alt="Outfit preview" 
-                    className="image-preview" 
-                  />
-                ) : (
-                  <div className="image-upload-placeholder">
-                    <Plus size={24} />
-                    <span>Add Image</span>
-                  </div>
-                )}
-              </label>
-              <input
-                id="edit-outfit-image"
-                type="file"
-                ref={editFileInputRef}
-                onChange={handleEditImageChange}
-                accept="image/*"
-                style={{ display: 'none' }}
-              />
-            </div>
-            
-            <div className="form-actions">
-              <button type="button" className="btn btn-secondary" onClick={resetEditForm}>
-                Cancel
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={isUpdatingOutfit}>
-                {isUpdatingOutfit ? "Updating..." : "Update Outfit"}
-              </button>
-            </div>
-          </form>
-        )}
-
-        <div className="outfit-list" style={{ marginTop: '1.5rem' }}>
-          {outfitsLoading ? (<p>Loading outfits...</p>) : (
-            allOutfits.map((outfit) => (
-              <div key={outfit.id} className="outfit-item">
+      </div>
+      <div className="outfits-section">
+        {outfitsLoading ? (
+          <div className="loading-container">
+            <Loader2 className="animate-spin" size={40} />
+            <p>Loading your wardrobe...</p>
+          </div>
+        ) : allOutfits.length === 0 ? (
+          <div className="empty-state">
+            <p>Your wardrobe is empty. Add your first outfit!</p>
+          </div>
+        ) : (
+          <div className="outfits-grid">
+            {allOutfits.map((outfit) => (
+              <div key={outfit.id} className="outfit-card">
+                <div className="outfit-actions-overlay">
+                  <button className="btn-icon" onClick={() => viewOutfitDetails(outfit)} title="View Details">
+                    <Eye size={18} />
+                  </button>
+                  <button className="btn-icon" onClick={() => openEditForm(outfit)} title="Edit Outfit">
+                    <Edit2 size={18} />
+                  </button>
+                  <button className="btn-icon" onClick={() => handleShareOutfit(outfit)} title="Share Outfit">
+                    <Share2 size={18} />
+                  </button>
+                  <button className="btn-icon delete-btn" onClick={() => handleDeleteOutfit(outfit.id, outfit.name)} title="Delete Outfit">
+                    <Trash2 size={18} />
+                  </button>
+                </div>
                 <div className="outfit-visual">
                   {outfit.image_url ? (
-                    <img 
-                      src={outfit.image_url} 
-                      alt={outfit.name} 
-                      className="outfit-thumbnail"
+                    <img
+                      src={outfit.image_url.startsWith('http') ? outfit.image_url : `${API_BASE_URL}${outfit.image_url}`}
+                      alt={outfit.name}
+                      className="outfit-image"
                     />
                   ) : (
                     <div className="outfit-color" style={{ backgroundColor: outfit.color }}></div>
                   )}
                 </div>
                 <div className="outfit-info">
-                  <div>
-                    <h3 className="outfit-name">{outfit.name}</h3>
-                    <p className="outfit-category">{outfit.category} • {outfit.season} • {outfit.color}</p>
-                  </div>
-                </div>
-                <div className="outfit-actions">
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => viewOutfitDetails(outfit)}
-                    title="View details"
-                  >
-                    <Eye size={16} />
-                  </button>
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => openEditForm(outfit)}
-                    title="Edit outfit"
-                  >
-                    <Edit2 size={16} />
-                  </button>
-                  <button 
-                    className="btn-icon btn-share" 
-                    onClick={() => handleShareOutfit(outfit)}
-                    title="Share outfit"
-                    disabled={isGeneratingShareLink}
-                  >
-                    {isGeneratingShareLink && selectedOutfit?.id === outfit.id ? 
-                      <Loader2 size={16} className="animate-spin" /> : 
-                      <Share2 size={16} />
-                    }
-                  </button>
-                  <button 
-                    className="btn-icon btn-danger" 
-                    onClick={() => handleDeleteOutfit(outfit.id, outfit.name)} 
-                    title="Delete Outfit"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  <h3 className="outfit-name">{outfit.name}</h3>
+                  <p className="outfit-meta">{outfit.category} • {outfit.season}</p>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Outfit Details Modal */}
+      {showEditForm && selectedOutfit && (
+        <div className="modal-overlay" onClick={() => setShowEditForm(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Edit Outfit</h2>
+              <button className="btn-close" onClick={() => setShowEditForm(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            <form onSubmit={handleUpdateOutfit}>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    value={editOutfit.name}
+                    onChange={(e) => setEditOutfit({ ...editOutfit, name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Category</label>
+                  <select value={editOutfit.category} onChange={(e) => setEditOutfit({ ...editOutfit, category: e.target.value })}>
+                    <option value="casual">Casual</option>
+                    <option value="formal">Formal</option>
+                    <option value="sport">Sport</option>
+                    <option value="traditional">Traditional</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Season</label>
+                  <select value={editOutfit.season} onChange={(e) => setEditOutfit({ ...editOutfit, season: e.target.value })}>
+                    <option value="all">All Season</option>
+                    <option value="spring">Spring</option>
+                    <option value="summer">Summer</option>
+                    <option value="fall">Fall</option>
+                    <option value="winter">Winter</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Color</label>
+                  <input type="text" value={editOutfit.color} onChange={(e) => setEditOutfit({ ...editOutfit, color: e.target.value })} required />
+                </div>
+                <div className="image-upload-container">
+                  <label htmlFor="edit-outfit-image" className="image-upload-label">
+                    {editImagePreview ? (
+                      <img src={editImagePreview.startsWith('http') ? editImagePreview : (editImagePreview.startsWith('data:') ? editImagePreview : `${API_BASE_URL}${editImagePreview}`)} alt="Edit preview" className="image-preview" />
+                    ) : (
+                      <div className="image-upload-placeholder">
+                        <Plus size={24} />
+                        <span>Add Image</span>
+                      </div>
+                    )}
+                  </label>
+                  <input
+                    id="edit-outfit-image"
+                    type="file"
+                    ref={editFileInputRef}
+                    onChange={handleEditImageChange}
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowEditForm(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" disabled={isUpdatingOutfit}>
+                  {isUpdatingOutfit ? "Updating..." : "Update Outfit"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {showDetails && selectedOutfit && (
         <div className="modal-overlay" onClick={() => setShowDetails(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -534,9 +488,9 @@ const AllOutfitsPage = () => {
             <div className="modal-body">
               <div className="outfit-detail-visual">
                 {selectedOutfit.image_url ? (
-                  <img 
-                    src={selectedOutfit.image_url} 
-                    alt={selectedOutfit.name} 
+                  <img
+                    src={selectedOutfit.image_url.startsWith('http') ? selectedOutfit.image_url : `${API_BASE_URL}${selectedOutfit.image_url}`}
+                    alt={selectedOutfit.name}
                     className="outfit-detail-image"
                   />
                 ) : (
@@ -566,8 +520,8 @@ const AllOutfitsPage = () => {
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary" onClick={() => setShowDetails(false)}>Close</button>
-              <button 
-                className="btn btn-primary" 
+              <button
+                className="btn btn-primary"
                 onClick={() => {
                   openEditForm(selectedOutfit);
                   setShowDetails(false);
@@ -579,8 +533,7 @@ const AllOutfitsPage = () => {
           </div>
         </div>
       )}
-
-      {/* Share Modal */}
+      { }
       {shareModalOpen && (
         <div className="modal-overlay" onClick={() => setShareModalOpen(false)}>
           <div className="modal-content share-modal" onClick={(e) => e.stopPropagation()}>
@@ -593,14 +546,14 @@ const AllOutfitsPage = () => {
             <div className="modal-body">
               <p>Share this link with others to let them view this outfit:</p>
               <div className="share-url-container">
-                <input 
-                  type="text" 
-                  value={shareUrl} 
-                  readOnly 
+                <input
+                  type="text"
+                  value={shareUrl}
+                  readOnly
                   className="share-url-input"
                 />
-                <button 
-                  className="btn btn-icon copy-btn" 
+                <button
+                  className="btn btn-icon copy-btn"
                   onClick={copyToClipboard}
                   title={copySuccess ? "Copied!" : "Copy to clipboard"}
                 >
@@ -617,26 +570,22 @@ const AllOutfitsPage = () => {
           </div>
         </div>
       )}
-      
-      {/* Add custom styles for the profile section and share functionality */}
+      { }
       <style jsx>{`
         .profile-section {
           margin-bottom: 1.5rem;
         }
-        
         .profile-card {
           background-color: white;
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 1rem;
         }
-        
         .profile-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-        
         .page-title {
           font-size: 2.5rem;
           font-weight: 700;
@@ -644,13 +593,11 @@ const AllOutfitsPage = () => {
           margin: 0;
           align-self: center;
         }
-        
         .profile-info {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-        
         .profile-picture-container {
           width: 50px;
           height: 50px;
@@ -659,17 +606,14 @@ const AllOutfitsPage = () => {
           cursor: pointer;
           transition: transform 0.2s ease;
         }
-        
         .profile-picture-container:hover {
           transform: scale(1.05);
         }
-        
         .profile-picture {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        
         .profile-picture-placeholder {
           width: 100%;
           height: 100%;
@@ -679,50 +623,39 @@ const AllOutfitsPage = () => {
           justify-content: center;
           color: #666;
         }
-        
         .profile-details {
           display: flex;
           flex-direction: column;
         }
-        
         .profile-greeting {
           font-size: 1.25rem;
           font-weight: 600;
           margin: 0;
-          color: #5a67d8; /* A pleasant blue color */
+          color: #5a67d8; 
         }
-        
         .profile-settings {
           background-color: #f0f0f0;
           border-radius: 50%;
           padding: 0.5rem;
           transition: background-color 0.2s ease;
         }
-        
         .profile-settings:hover {
           background-color: #e0e0e0;
         }
-        
-        /* Share button styles */
         .btn-share {
           color: #4299e1;
         }
-        
         .btn-share:hover {
           color: #2b6cb0;
           background-color: rgba(66, 153, 225, 0.1);
         }
-        
-        /* Share modal styles */
         .share-modal {
           max-width: 500px;
         }
-        
         .share-url-container {
           display: flex;
           margin: 1rem 0;
         }
-        
         .share-url-input {
           flex: 1;
           padding: 0.5rem;
@@ -731,30 +664,25 @@ const AllOutfitsPage = () => {
           font-family: monospace;
           font-size: 0.875rem;
         }
-        
         .copy-btn {
           border-radius: 0 4px 4px 0;
           border-left: none;
         }
-        
         .share-note {
           font-size: 0.875rem;
           color: #718096;
           margin-top: 0.5rem;
         }
-        
         @media (max-width: 640px) {
           .profile-header {
             flex-direction: column;
             gap: 1rem;
             align-items: flex-start;
           }
-          
           .page-title {
             font-size: 2rem;
             align-self: flex-start;
           }
-          
           .share-modal {
             max-width: 90%;
           }

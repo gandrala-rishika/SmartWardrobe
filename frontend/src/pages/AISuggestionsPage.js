@@ -3,12 +3,9 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Sparkles, Cloud, Star, Plus, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-// Define your backend server's URL based on environment
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? process.env.REACT_APP_PROD_BACKEND_URL
   : process.env.REACT_APP_DEV_BACKEND_URL;
-
 const AISuggestionsPage = () => {
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [weatherSuggestions, setWeatherSuggestions] = useState([]);
@@ -18,12 +15,10 @@ const AISuggestionsPage = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     getUserLocation();
     fetchUserProfile();
   }, []);
-
   const getUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -37,11 +32,9 @@ const AISuggestionsPage = () => {
       );
     }
   };
-
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get("/profile");
-      // Convert relative URL to absolute URL if needed
       if (response.data.profile_pic_url) {
         const imageUrl = response.data.profile_pic_url.startsWith('http') 
           ? response.data.profile_pic_url 
@@ -59,11 +52,9 @@ const AISuggestionsPage = () => {
       setProfileLoading(false);
     }
   };
-
   const getAISuggestions = async () => {
     setAiLoading(true);
     try {
-      // Remove /api prefix since it's likely already configured in axios baseURL
       const response = await axios.post("/suggestions/ai");
       setAiSuggestions(response.data.suggestions);
       toast.success(response.data.reasoning);
@@ -73,11 +64,9 @@ const AISuggestionsPage = () => {
       setAiLoading(false);
     }
   };
-
   const getWeatherSuggestions = async () => {
     setWeatherLoading(true);
     try {
-      // Remove /api prefix since it's likely already configured in axios baseURL
       const params = userLocation.lat && userLocation.lon ? `?lat=${userLocation.lat}&lon=${userLocation.lon}` : "";
       const response = await axios.get(`/suggestions/weather${params}`);
       setWeatherSuggestions(response.data.suggestions);
@@ -88,8 +77,6 @@ const AISuggestionsPage = () => {
       setWeatherLoading(false);
     }
   };
-
-  // Function to get recommendation level class
   const getRecommendationClass = (level) => {
     switch (level) {
       case "mostly recommended":
@@ -102,8 +89,6 @@ const AISuggestionsPage = () => {
         return "";
     }
   };
-
-  // Function to get recommendation icon
   const getRecommendationIcon = (level) => {
     switch (level) {
       case "mostly recommended":
@@ -116,10 +101,9 @@ const AISuggestionsPage = () => {
         return <Star size={16} fill="#ddd" color="#ddd" />;
     }
   };
-
   return (
     <div className="page-content">
-      {/* Profile Section */}
+      {}
       <div className="profile-section">
         <div className="profile-card">
           <div className="profile-header">
@@ -156,9 +140,8 @@ const AISuggestionsPage = () => {
           </div>
         </div>
       </div>
-
       <div className="suggestions-grid">
-        {/* AI Suggestions */}
+        {}
         <div className="card suggestion-card">
           <div className="card-header">
             <Sparkles className="icon-accent" size={24} />
@@ -193,8 +176,7 @@ const AISuggestionsPage = () => {
             </div>
           )}
         </div>
-
-        {/* Weather Suggestions */}
+        {}
         <div className="card suggestion-card">
           <div className="card-header">
             <Cloud className="icon-weather" size={24} />
@@ -239,26 +221,22 @@ const AISuggestionsPage = () => {
           )}
         </div>
       </div>
-      
-      {/* Add custom styles for the profile section */}
+      {}
       <style jsx>{`
         .profile-section {
           margin-bottom: 1.5rem;
         }
-        
         .profile-card {
           background-color: white;
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 1rem;
         }
-        
         .profile-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
         }
-        
         .page-title {
           font-size: 2.5rem;
           font-weight: 700;
@@ -266,13 +244,11 @@ const AISuggestionsPage = () => {
           margin: 0;
           align-self: center;
         }
-        
         .profile-info {
           display: flex;
           align-items: center;
           gap: 1rem;
         }
-        
         .profile-picture-container {
           width: 50px;
           height: 50px;
@@ -281,17 +257,14 @@ const AISuggestionsPage = () => {
           cursor: pointer;
           transition: transform 0.2s ease;
         }
-        
         .profile-picture-container:hover {
           transform: scale(1.05);
         }
-        
         .profile-picture {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
-        
         .profile-picture-placeholder {
           width: 100%;
           height: 100%;
@@ -301,37 +274,31 @@ const AISuggestionsPage = () => {
           justify-content: center;
           color: #666;
         }
-        
         .profile-details {
           display: flex;
           flex-direction: column;
         }
-        
         .profile-greeting {
           font-size: 1.25rem;
           font-weight: 600;
           margin: 0;
-          color: #5a67d8; /* A pleasant blue color */
+          color: #5a67d8; 
         }
-        
         .profile-settings {
           background-color: #f0f0f0;
           border-radius: 50%;
           padding: 0.5rem;
           transition: background-color 0.2s ease;
         }
-        
         .profile-settings:hover {
           background-color: #e0e0e0;
         }
-        
         @media (max-width: 640px) {
           .profile-header {
             flex-direction: column;
             gap: 1rem;
             align-items: flex-start;
           }
-          
           .page-title {
             font-size: 2rem;
             align-self: flex-start;
@@ -341,5 +308,4 @@ const AISuggestionsPage = () => {
     </div>
   );
 };
-
 export default AISuggestionsPage;

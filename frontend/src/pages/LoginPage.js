@@ -2,34 +2,28 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import "../styles/LoginPage.css";
-
 const LoginPage = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    gender: "rather not say", // Added gender field with default value
+    gender: "rather not say", 
   });
   const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const payload = isLogin
         ? { username: formData.username, password: formData.password }
-        : formData; // This now includes the gender field
-
+        : formData; 
       const response = await axios.post(endpoint, payload);
       const { token, username } = response.data;
-
       toast.success(isLogin ? "Login successful!" : "Registration successful!");
       onLogin(token, username);
     } catch (error) {
@@ -39,7 +33,6 @@ const LoginPage = ({ onLogin }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="login-container" data-testid="login-page">
       <div className="login-background">
@@ -47,7 +40,6 @@ const LoginPage = ({ onLogin }) => {
         <div className="floating-shape shape-2"></div>
         <div className="floating-shape shape-3"></div>
       </div>
-
       <div className="login-card fade-in" data-testid="login-card">
         <div className="login-header">
           <h1 className="login-title text-gradient" data-testid="login-title">
@@ -57,7 +49,6 @@ const LoginPage = ({ onLogin }) => {
             Your AI-powered fashion assistant
           </p>
         </div>
-
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -73,7 +64,6 @@ const LoginPage = ({ onLogin }) => {
               data-testid="username-input"
             />
           </div>
-
           {!isLogin && (
             <>
               <div className="form-group">
@@ -90,7 +80,6 @@ const LoginPage = ({ onLogin }) => {
                   data-testid="email-input"
                 />
               </div>
-
               <div className="form-group">
                 <label htmlFor="gender">Gender</label>
                 <select
@@ -108,7 +97,6 @@ const LoginPage = ({ onLogin }) => {
               </div>
             </>
           )}
-
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -123,7 +111,6 @@ const LoginPage = ({ onLogin }) => {
               data-testid="password-input"
             />
           </div>
-
           <button
             type="submit"
             className="btn btn-primary login-btn"
@@ -133,7 +120,6 @@ const LoginPage = ({ onLogin }) => {
             {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </button>
         </form>
-
         <div className="login-footer">
           <p>
             {isLogin ? "Don't have an account?" : "Already have an account?"}
@@ -150,5 +136,4 @@ const LoginPage = ({ onLogin }) => {
     </div>
   );
 };
-
 export default LoginPage;

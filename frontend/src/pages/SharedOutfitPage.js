@@ -3,12 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { ArrowLeft, Plus, Calendar, Tag, Palette, User, Star } from "lucide-react";
-
-// Define your backend server's URL based on environment
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? process.env.REACT_APP_PROD_BACKEND_URL
   : process.env.REACT_APP_DEV_BACKEND_URL;
-
 const SharedOutfitPage = () => {
   const { shareToken } = useParams();
   const [outfit, setOutfit] = useState(null);
@@ -18,17 +15,14 @@ const SharedOutfitPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchSharedOutfit();
     checkAuthStatus();
   }, [shareToken]);
-
   const checkAuthStatus = () => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   };
-
   const fetchSharedOutfit = async () => {
     try {
       const response = await axios.get(`/shared-outfit/${shareToken}`);
@@ -39,13 +33,11 @@ const SharedOutfitPage = () => {
       setLoading(false);
     }
   };
-
   const handleAddToWardrobe = async () => {
     if (!isAuthenticated) {
       setShowLoginModal(true);
       return;
     }
-
     setAddingToWardrobe(true);
     try {
       await axios.post(`/shared-outfit/${shareToken}/add-to-wardrobe`);
@@ -57,11 +49,9 @@ const SharedOutfitPage = () => {
       setAddingToWardrobe(false);
     }
   };
-
   const handleLoginRedirect = () => {
     navigate("/login");
   };
-
   if (loading) {
     return (
       <div className="loading-container">
@@ -70,7 +60,6 @@ const SharedOutfitPage = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="error-container">
@@ -82,7 +71,6 @@ const SharedOutfitPage = () => {
       </div>
     );
   }
-
   return (
     <div className="shared-outfit-page">
       <div className="shared-outfit-container">
@@ -93,7 +81,6 @@ const SharedOutfitPage = () => {
           <ArrowLeft size={16} />
           Back to Home
         </button>
-        
         <div className="shared-outfit-card">
           <div className="shared-outfit-header">
             <h1>{outfit.name}</h1>
@@ -112,7 +99,6 @@ const SharedOutfitPage = () => {
               </div>
             </div>
           </div>
-          
           <div className="shared-outfit-image">
             {outfit.image_url ? (
               <img 
@@ -126,7 +112,6 @@ const SharedOutfitPage = () => {
               </div>
             )}
           </div>
-          
           <div className="shared-outfit-actions">
             <button 
               className={`btn ${isAuthenticated ? "btn-primary" : "btn-secondary"}`} 
@@ -152,13 +137,11 @@ const SharedOutfitPage = () => {
             </button>
           </div>
         </div>
-        
         <div className="shared-outfit-footer">
           <p>This outfit was shared with you. {isAuthenticated ? "Click the button above to add it to your wardrobe." : "Login to add this outfit to your wardrobe."}</p>
         </div>
       </div>
-
-      {/* Login Modal */}
+      {}
       {showLoginModal && (
         <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -188,7 +171,6 @@ const SharedOutfitPage = () => {
           </div>
         </div>
       )}
-      
       <style jsx>{`
         .shared-outfit-page {
           min-height: 100vh;
@@ -198,44 +180,37 @@ const SharedOutfitPage = () => {
           justify-content: center;
           align-items: center;
         }
-        
         .shared-outfit-container {
           max-width: 600px;
           width: 100%;
         }
-        
         .back-button {
           margin-bottom: 1.5rem;
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
-        
         .shared-outfit-card {
           background-color: white;
           border-radius: 12px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           overflow: hidden;
         }
-        
         .shared-outfit-header {
           padding: 1.5rem;
           border-bottom: 1px solid #e2e8f0;
         }
-        
         .shared-outfit-header h1 {
           margin: 0 0 1rem 0;
           font-size: 1.875rem;
           font-weight: 700;
           color: #2d3748;
         }
-        
         .outfit-meta {
           display: flex;
           flex-wrap: wrap;
           gap: 1rem;
         }
-        
         .meta-item {
           display: flex;
           align-items: center;
@@ -246,20 +221,17 @@ const SharedOutfitPage = () => {
           padding: 0.25rem 0.5rem;
           border-radius: 4px;
         }
-        
         .shared-outfit-image {
           padding: 1.5rem;
           display: flex;
           justify-content: center;
         }
-        
         .outfit-image {
           max-width: 100%;
           max-height: 400px;
           border-radius: 8px;
           object-fit: contain;
         }
-        
         .outfit-color-placeholder {
           width: 200px;
           height: 200px;
@@ -270,19 +242,16 @@ const SharedOutfitPage = () => {
           color: white;
           font-weight: 500;
         }
-        
         .shared-outfit-actions {
           padding: 1.5rem;
           border-top: 1px solid #e2e8f0;
         }
-        
         .shared-outfit-footer {
           margin-top: 1.5rem;
           text-align: center;
           color: #718096;
           font-size: 0.875rem;
         }
-        
         .loading-container, .error-container {
           display: flex;
           flex-direction: column;
@@ -291,12 +260,10 @@ const SharedOutfitPage = () => {
           min-height: 50vh;
           text-align: center;
         }
-        
         .error-container h2 {
           color: #e53e3e;
           margin-bottom: 1rem;
         }
-        
         .spinner {
           width: 16px;
           height: 16px;
@@ -307,11 +274,9 @@ const SharedOutfitPage = () => {
           display: inline-block;
           margin-right: 0.5rem;
         }
-        
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
-        
         .modal-overlay {
           position: fixed;
           top: 0;
@@ -324,7 +289,6 @@ const SharedOutfitPage = () => {
           justify-content: center;
           z-index: 1000;
         }
-        
         .modal-content {
           background-color: white;
           border-radius: 8px;
@@ -332,19 +296,16 @@ const SharedOutfitPage = () => {
           max-width: 400px;
           width: 90%;
         }
-        
         .modal-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
         }
-        
         .modal-header h2 {
           margin: 0;
           color: #2d3748;
         }
-        
         .btn-close {
           background: none;
           border: none;
@@ -353,34 +314,27 @@ const SharedOutfitPage = () => {
           border-radius: 4px;
           transition: background-color 0.2s;
         }
-        
         .btn-close:hover {
           background-color: #f0f0f0;
         }
-        
         .modal-body {
           margin-bottom: 1.5rem;
         }
-        
         .modal-actions {
           display: flex;
           gap: 0.5rem;
           justify-content: flex-end;
         }
-        
         @media (max-width: 640px) {
           .shared-outfit-page {
             padding: 1rem 0.5rem;
           }
-          
           .shared-outfit-header h1 {
             font-size: 1.5rem;
           }
-          
           .outfit-meta {
             gap: 0.5rem;
           }
-          
           .shared-outfit-card {
             max-width: 90%;
           }
@@ -389,5 +343,4 @@ const SharedOutfitPage = () => {
     </div>
   );
 };
-
 export default SharedOutfitPage;

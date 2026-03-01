@@ -3,12 +3,9 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Plus, Trash2, Loader2, Edit2, Eye, X, User, Settings, Share2, Copy, Check, Users, Star, StarOff, LogIn, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-// Define your backend server's URL based on environment
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? process.env.REACT_APP_PROD_BACKEND_URL
   : process.env.REACT_APP_DEV_BACKEND_URL;
-
 const GroupsPage = () => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -29,53 +26,37 @@ const GroupsPage = () => {
   const [ratingOutfitId, setRatingOutfitId] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
   const navigate = useNavigate();
-  
   const [newGroup, setNewGroup] = useState({ 
     name: '', 
     description: ''
   });
-  
   const [joinGroupData, setJoinGroupData] = useState({
     invite_code: ''
   });
-  
   const [shareOutfitData, setShareOutfitData] = useState({
     outfit_id: ''
   });
-
-  // Helper function to extract error message from FastAPI error response
   const getErrorMessage = (error) => {
     if (error.response?.data?.detail) {
       const detail = error.response.data.detail;
-      
-      // Handle FastAPI validation errors (array of objects)
       if (Array.isArray(detail) && detail.length > 0) {
-        // Join all error messages into a single, readable string
         return detail.map(err => `${err.loc.join('.')}: ${err.msg}`).join('\n');
       }
-      
-      // Handle string error messages
       if (typeof detail === 'string') {
         return detail;
       }
-      
-      // Handle object error messages
       if (typeof detail === 'object' && detail.msg) {
         return detail.msg;
       }
     }
-    
-    // Fallback to other error properties
     return error.response?.data?.message || 
           error.message || 
           "An error occurred";
   };
-
   useEffect(() => {
     fetchGroups();
     fetchUserProfile();
   }, []);
-
   const fetchGroups = async () => {
     setGroupsLoading(true);
     try {
@@ -87,7 +68,6 @@ const GroupsPage = () => {
       setGroupsLoading(false);
     }
   };
-
   const fetchGroupDetails = async (groupId) => {
     setGroupDetailsLoading(true);
     try {
@@ -100,7 +80,6 @@ const GroupsPage = () => {
       setGroupDetailsLoading(false);
     }
   };
-
   const fetchUserOutfits = async () => {
     setUserOutfitsLoading(true);
     try {
@@ -112,11 +91,9 @@ const GroupsPage = () => {
       setUserOutfitsLoading(false);
     }
   };
-
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get("/profile");
-      // Convert relative URL to absolute URL if needed
       if (response.data.profile_pic_url) {
         const imageUrl = response.data.profile_pic_url.startsWith('http') 
           ? response.data.profile_pic_url 
@@ -134,7 +111,6 @@ const GroupsPage = () => {
       setProfileLoading(false);
     }
   };
-
   const handleCreateGroup = async (e) => {
     e.preventDefault();
     if (!newGroup.name) {
@@ -153,7 +129,6 @@ const GroupsPage = () => {
       setIsCreatingGroup(false);
     }
   };
-
   const handleJoinGroup = async (e) => {
     e.preventDefault();
     if (!joinGroupData.invite_code) {
@@ -172,7 +147,6 @@ const GroupsPage = () => {
       setIsJoiningGroup(false);
     }
   };
-
   const handleShareOutfit = async (e) => {
     e.preventDefault();
     if (!shareOutfitData.outfit_id) {
@@ -195,7 +169,6 @@ const GroupsPage = () => {
       setIsSharingOutfit(false);
     }
   };
-
   const handleRateOutfit = async (outfitId, rating) => {
     setIsRatingOutfit(true);
     setRatingOutfitId(outfitId);
@@ -212,7 +185,6 @@ const GroupsPage = () => {
       setRatingOutfitId(null);
     }
   };
-
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
       .then(() => {
@@ -223,22 +195,18 @@ const GroupsPage = () => {
         toast.error("Failed to copy to clipboard");
       });
   };
-
   const resetCreateGroupForm = () => {
     setNewGroup({ name: '', description: '' });
     setShowCreateGroupForm(false);
   };
-
   const resetJoinGroupForm = () => {
     setJoinGroupData({ invite_code: '' });
     setShowJoinGroupForm(false);
   };
-
   const resetShareOutfitForm = () => {
     setShareOutfitData({ outfit_id: '' });
     setShowShareOutfitForm(false);
   };
-
   const renderStars = (rating, outfitId) => {
     return (
       <div className="rating-stars">
@@ -261,10 +229,9 @@ const GroupsPage = () => {
       </div>
     );
   };
-
   return (
     <div className="page-content">
-      {/* Profile Section */}
+      {}
       <div className="profile-section">
         <div className="profile-card">
           <div className="profile-header">
@@ -301,15 +268,13 @@ const GroupsPage = () => {
           </div>
         </div>
       </div>
-
       <div className="groups-container">
-        {/* Groups List */}
+        {}
         <div className="card groups-list-card">
           <div className="card-header">
             <Users className="icon-primary" size={24} />
             <h2>My Groups</h2>
           </div>
-          
           <div className="group-actions">
             <button className="btn btn-primary" onClick={() => {
               setShowCreateGroupForm(!showCreateGroupForm);
@@ -324,7 +289,6 @@ const GroupsPage = () => {
               {showJoinGroupForm ? "Cancel" : "Join Group"}
             </button>
           </div>
-
           {showCreateGroupForm && (
             <form className="add-group-form" onSubmit={handleCreateGroup}>
               <input
@@ -345,7 +309,6 @@ const GroupsPage = () => {
               </button>
             </form>
           )}
-
           {showJoinGroupForm && (
             <form className="join-group-form" onSubmit={handleJoinGroup}>
               <input
@@ -360,7 +323,6 @@ const GroupsPage = () => {
               </button>
             </form>
           )}
-
           <div className="groups-list" style={{ marginTop: '1.5rem' }}>
             {groupsLoading ? (
               <p>Loading groups...</p>
@@ -400,15 +362,13 @@ const GroupsPage = () => {
             )}
           </div>
         </div>
-
-        {/* Group Details */}
+        {}
         {selectedGroup && (
           <div className="card group-details-card">
             <div className="card-header">
               <Users className="icon-primary" size={24} />
               <h2>{selectedGroup.name}</h2>
             </div>
-            
             {groupDetailsLoading ? (
               <p>Loading group details...</p>
             ) : (
@@ -435,7 +395,6 @@ const GroupsPage = () => {
                       Share Outfit
                     </button>
                   </div>
-                  
                   <div className="group-members">
                     <h4>Members</h4>
                     <div className="members-list">
@@ -460,7 +419,6 @@ const GroupsPage = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="shared-outfits-section">
                   <h4>Shared Outfits</h4>
                   {groupDetails.shared_outfits.length === 0 ? (
@@ -511,8 +469,7 @@ const GroupsPage = () => {
           </div>
         )}
       </div>
-
-      {/* Share Outfit Modal */}
+      {}
       {showShareOutfitForm && (
         <div className="modal-overlay" onClick={() => setShowShareOutfitForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -563,29 +520,24 @@ const GroupsPage = () => {
           </div>
         </div>
       )}
-      
-      {/* Add custom styles for the groups page */}
+      {}
       <style jsx>{`
         .groups-container {
           display: flex;
           gap: 1.5rem;
         }
-        
         .groups-list-card {
           flex: 1;
           max-width: 400px;
         }
-        
         .group-details-card {
           flex: 2;
         }
-        
         .group-actions {
           display: flex;
           gap: 0.5rem;
           margin-bottom: 1rem;
         }
-        
         .add-group-form, .join-group-form {
           display: flex;
           flex-direction: column;
@@ -595,7 +547,6 @@ const GroupsPage = () => {
           background-color: #f8f9fa;
           border-radius: 6px;
         }
-        
         .group-item {
           display: flex;
           justify-content: space-between;
@@ -605,56 +556,46 @@ const GroupsPage = () => {
           cursor: pointer;
           transition: background-color 0.2s ease;
         }
-        
         .group-item:hover {
           background-color: #f8f9fa;
         }
-        
         .group-item.active {
           background-color: #e6f7ff;
           border-left: 3px solid #1890ff;
         }
-        
         .group-name {
           font-size: 1.1rem;
           font-weight: 600;
           margin: 0 0 0.25rem 0;
         }
-        
         .group-meta {
           font-size: 0.875rem;
           color: #666;
           margin: 0 0 0.5rem 0;
         }
-        
         .group-description {
           font-size: 0.875rem;
           color: #333;
           margin: 0;
         }
-        
         .group-info-section {
           margin-bottom: 1.5rem;
         }
-        
         .group-details-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
         }
-        
         .group-members h4 {
           margin: 0 0 0.75rem 0;
           font-size: 1.1rem;
         }
-        
         .members-list {
           display: flex;
           flex-wrap: wrap;
           gap: 0.75rem;
         }
-        
         .member-item {
           display: flex;
           align-items: center;
@@ -663,14 +604,12 @@ const GroupsPage = () => {
           background-color: #f8f9fa;
           border-radius: 20px;
         }
-        
         .member-avatar {
           width: 24px;
           height: 24px;
           border-radius: 50%;
           object-fit: cover;
         }
-        
         .member-avatar-placeholder {
           width: 24px;
           height: 24px;
@@ -681,23 +620,19 @@ const GroupsPage = () => {
           justify-content: center;
           color: #666;
         }
-        
         .member-name {
           font-size: 0.875rem;
           font-weight: 500;
         }
-        
         .shared-outfits-section h4 {
           margin: 0 0 1rem 0;
           font-size: 1.1rem;
         }
-        
         .shared-outfits-list {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-        
         .shared-outfit-item {
           display: flex;
           gap: 1rem;
@@ -705,46 +640,38 @@ const GroupsPage = () => {
           border: 1px solid #e2e8f0;
           border-radius: 6px;
         }
-        
         .outfit-visual {
           flex-shrink: 0;
         }
-        
         .outfit-thumbnail {
           width: 80px;
           height: 80px;
           object-fit: cover;
           border-radius: 4px;
         }
-        
         .outfit-color {
           width: 80px;
           height: 80px;
           border-radius: 4px;
         }
-        
         .outfit-info {
           flex: 1;
         }
-        
         .outfit-name {
           font-size: 1rem;
           font-weight: 600;
           margin: 0 0 0.25rem 0;
         }
-        
         .outfit-category {
           font-size: 0.875rem;
           color: #666;
           margin: 0 0 0.25rem 0;
         }
-        
         .outfit-shared-by {
           font-size: 0.875rem;
           color: #4a5568;
           margin: 0;
         }
-        
         .outfit-rating {
           display: flex;
           flex-direction: column;
@@ -752,40 +679,33 @@ const GroupsPage = () => {
           gap: 0.5rem;
           min-width: 150px;
         }
-        
         .rating-info {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
         }
-        
         .average-rating {
           font-weight: 600;
           font-size: 1rem;
         }
-        
         .ratings-count {
           font-size: 0.75rem;
           color: #666;
         }
-        
         .user-rating {
           display: flex;
           flex-direction: column;
           align-items: flex-end;
           gap: 0.25rem;
         }
-        
         .user-rating p {
           font-size: 0.75rem;
           margin: 0;
         }
-        
         .rating-stars {
           display: flex;
           gap: 0.25rem;
         }
-        
         .star-btn {
           background: none;
           border: none;
@@ -793,51 +713,41 @@ const GroupsPage = () => {
           color: #d1d5db;
           transition: color 0.2s ease;
         }
-        
         .star-btn:hover {
           color: #fbbf24;
         }
-        
         .star-btn.star-active {
           color: #fbbf24;
         }
-        
         .outfit-selection {
           display: flex;
           flex-direction: column;
           gap: 1rem;
         }
-        
         .outfit-selection label {
           font-weight: 500;
         }
-        
         .outfit-selection select {
           padding: 0.5rem;
           border: 1px solid #e2e8f0;
           border-radius: 4px;
         }
-        
         .form-actions {
           display: flex;
           justify-content: flex-end;
           gap: 0.5rem;
           margin-top: 1rem;
         }
-        
         @media (max-width: 768px) {
           .groups-container {
             flex-direction: column;
           }
-          
           .groups-list-card {
             max-width: 100%;
           }
-          
           .shared-outfit-item {
             flex-direction: column;
           }
-          
           .outfit-rating {
             align-items: flex-start;
           }
@@ -846,5 +756,4 @@ const GroupsPage = () => {
     </div>
   );
 };
-
 export default GroupsPage;
