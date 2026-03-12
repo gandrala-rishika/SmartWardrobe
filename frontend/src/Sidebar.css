@@ -76,7 +76,6 @@
   background-color: rgba(211, 47, 47, 0.05);
 }
 
-/* --- Responsive Design for Sidebar --- */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;

@@ -30,7 +30,12 @@ body {
   color: var(--color-text);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Space Grotesk', sans-serif;
   color: var(--color-text);
 }
@@ -57,11 +62,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* Button Styles */
 .btn {
   padding: 12px 28px;
   border-radius: 25px;
@@ -117,7 +126,6 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-/* Card Styles */
 .card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -132,7 +140,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 12px 40px var(--color-shadow);
 }
 
-/* Input Styles */
 .input {
   width: 100%;
   padding: 14px 18px;
@@ -150,7 +157,6 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
-/* Utility Classes */
 .glass-effect {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
@@ -164,10 +170,16 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
-/* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .fade-in {
@@ -175,32 +187,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .slide-up {
   animation: slideUp 0.5s ease-out;
 }
 
-/* ========================================================================== */
-/* === MULTI-PAGE LAYOUT STYLES === */
-/* ========================================================================== */
-
-/* --- Main App Container --- */
 .app-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* --- Main Content Area --- */
 .main-content {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
 }
 
-/* --- Page Content Wrapper --- */
 .page-content h1 {
   font-size: 28px;
   font-weight: 700;
@@ -208,7 +220,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-primary-dark);
 }
 
-/* --- Sidebar Styles --- */
 .sidebar {
   width: 260px;
   background: rgba(255, 255, 255, 0.95);
@@ -285,14 +296,13 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(211, 47, 47, 0.05);
 }
 
-/* --- Grid Layouts for Pages --- */
-.stats-grid, .suggestions-grid {
+.stats-grid,
+.suggestions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 32px;
 }
 
-/* --- Reusable Component Styles --- */
 .card-header {
   display: flex;
   align-items: center;
@@ -436,7 +446,6 @@ h1, h2, h3, h4, h5, h6 {
   gap: 16px;
 }
 
-/* --- Suggestion Item Styles --- */
 .suggestion-item {
   padding: 20px;
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(0, 172, 193, 0.05));
@@ -474,7 +483,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* --- Suggestion Item Enhancements --- */
 .suggestion-header {
   display: flex;
   justify-content: space-between;
@@ -505,7 +513,6 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
 }
 
-/* --- Recommendation Level Styles --- */
 .recommendation-most {
   background-color: #e6f7e6;
   color: #2d7a2d;
@@ -524,7 +531,6 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #9c27b0;
 }
 
-/* --- Icon Styles --- */
 .icon-accent {
   color: var(--color-primary);
 }
@@ -533,7 +539,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-secondary);
 }
 
-/* --- Add Outfit Form --- */
 .add-outfit-form {
   display: flex;
   flex-direction: column;
@@ -577,7 +582,6 @@ h1, h2, h3, h4, h5, h6 {
   pointer-events: none;
 }
 
-/* --- Image Upload Styles --- */
 .image-upload-container {
   margin: 1rem 0;
 }
@@ -623,7 +627,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
 }
 
-/* --- Modal Styles (Simplified) --- */
 div.modal-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -780,7 +783,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   color: var(--color-text-light);
 }
 
-/* --- Complementary Items Styles --- */
 .complementary-items {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
@@ -819,7 +821,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   border: 1px solid var(--color-border);
 }
 
-/* --- Profile Page Styles --- */
 .profile-section {
   margin-bottom: 1.5rem;
 }
@@ -1063,7 +1064,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   gap: 1.5rem;
 }
 
-/* --- Groups Page Styles --- */
 .groups-container {
   display: flex;
   gap: 1.5rem;
@@ -1087,7 +1087,8 @@ div.modal-overlay div.modal-content div.modal-footer {
   margin-bottom: 1rem;
 }
 
-.add-group-form, .join-group-form {
+.add-group-form,
+.join-group-form {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -1339,7 +1340,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   border-radius: 4px;
 }
 
-/* --- Share button styles --- */
 .btn-share {
   color: var(--color-secondary);
 }
@@ -1349,7 +1349,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   background-color: rgba(0, 172, 193, 0.1);
 }
 
-/* --- Share modal styles --- */
 .share-modal {
   max-width: 500px;
 }
@@ -1379,7 +1378,6 @@ div.modal-overlay div.modal-content div.modal-footer {
   margin-top: 0.5rem;
 }
 
-/* --- Shared Outfit Page Styles --- */
 .shared-outfit-page {
   min-height: 100vh;
   background-color: var(--color-background);
@@ -1473,7 +1471,8 @@ div.modal-overlay div.modal-content div.modal-footer {
   font-size: 0.875rem;
 }
 
-.loading-container, .error-container {
+.loading-container,
+.error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1499,7 +1498,9 @@ div.modal-overlay div.modal-content div.modal-footer {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .modal-overlay {
@@ -1564,13 +1565,13 @@ div.modal-overlay div.modal-content div.modal-footer {
   color: var(--color-text);
 }
 
-/* --- Responsive Design --- */
 @media (max-width: 1024px) {
+
   .stats-grid,
   .suggestions-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .profile-content {
     grid-template-columns: 1fr;
   }
@@ -1580,95 +1581,96 @@ div.modal-overlay div.modal-content div.modal-footer {
   .app-container {
     flex-direction: column;
   }
+
   .sidebar {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
   }
+
   .main-content {
     padding: 1rem;
   }
-  
+
   .image-upload-label {
     max-width: 150px;
     height: 100px;
   }
-  
+
   .modal-content {
     width: 95%;
   }
-  
+
   .shared-outfit-page {
     padding: 1rem 0.5rem;
   }
-  
+
   .shared-outfit-card {
     max-width: 90%;
   }
-  
+
   .shared-outfit-header h1 {
     font-size: 1.5rem;
   }
-  
+
   .outfit-image {
     max-height: 300px;
   }
-  
+
   .outfit-color-placeholder {
     width: 150px;
     height: 150px;
   }
-  
+
   .profile-header {
     flex-direction: column;
     gap: 1rem;
     align-items: flex-start;
   }
-  
+
   .page-title {
     font-size: 2rem;
     align-self: flex-start;
   }
-  
+
   .groups-container {
     flex-direction: column;
   }
-  
+
   .groups-list-card {
     max-width: 100%;
   }
-  
+
   .shared-outfit-item {
     flex-direction: column;
   }
-  
+
   .outfit-rating {
     align-items: flex-start;
   }
-  
+
   .share-modal {
     max-width: 90%;
   }
-  
+
   .modal-overlay .modal-content {
     width: 95%;
   }
-  
+
   .modal-overlay .modal-content .modal-body .outfit-detail-visual .outfit-detail-color {
     width: 150px;
     height: 150px;
   }
-  
+
   .not-found-container {
     padding: 1rem;
   }
-  
+
   .detail-value {
     font-size: 14px;
   }
 }
 
-/* Add to App.css */
 .outfit-category {
   font-size: 13px;
   color: var(--color-text-light);
